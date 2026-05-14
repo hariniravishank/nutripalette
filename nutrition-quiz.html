@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Balanced Is Your Diet? Free Nutrition Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #16a34a;
+    --green-light: #dcfce7;
+    --green-mid: #86efac;
+    --green-dark: #14532d;
+    --amber: #d97706;
+    --amber-light: #fef3c7;
+    --red: #e11d48;
+    --red-light: #ffe4e6;
+    --blue: #2563eb;
+    --purple: #7c3aed;
+    --teal: #0891b2;
+    --rose: #e11d48;
+    --bg: #f9fafb;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --border-strong: #d1d5db;
+    --text: #111827;
+    --text-muted: #6b7280;
+    --text-soft: #9ca3af;
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem 4rem;
+    color: var(--text);
+  }
+
+  /* Background decoration */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -120px; right: -120px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #bbf7d0 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -100px; left: -100px;
+    width: 350px; height: 350px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fef9c3 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  #qw {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 580px;
+    animation: fadeUp .5s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Header */
+  .hdr { text-align: center; margin-bottom: 2rem; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--green-light); color: var(--green-dark);
+    font-size: 11px; font-weight: 800; letter-spacing: .08em;
+    padding: 5px 14px; border-radius: 99px;
+    text-transform: uppercase; margin-bottom: 14px;
+  }
+  .badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    display: inline-block;
+  }
+  .hdr h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(22px, 5vw, 30px);
+    font-weight: 700; line-height: 1.2;
+    color: var(--text); margin-bottom: 10px;
+  }
+  .hdr p { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+
+  /* Progress */
+  .pb-wrap {
+    background: var(--border); border-radius: 99px;
+    height: 8px; margin-bottom: 6px; overflow: hidden;
+  }
+  .pb-fill {
+    height: 100%; border-radius: 99px;
+    background: linear-gradient(90deg, #4ade80, var(--green));
+    transition: width .45s cubic-bezier(.4,0,.2,1);
+  }
+  .slbl { font-size: 12px; color: var(--text-soft); text-align: right; margin-bottom: 18px; font-weight: 700; }
+
+  /* Question card */
+  .qcard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 8px 24px rgba(0,0,0,.04);
+    animation: fadeUp .3s ease both;
+  }
+  .qtag {
+    font-size: 11px; font-weight: 800; letter-spacing: .07em;
+    text-transform: uppercase; color: var(--green);
+    background: var(--green-light);
+    padding: 4px 12px; border-radius: 99px;
+    display: inline-block; margin-bottom: 12px;
+  }
+  .qtext {
+    font-family: 'Fraunces', serif;
+    font-size: 19px; font-weight: 700;
+    color: var(--text); margin-bottom: 1.5rem; line-height: 1.4;
+  }
+  .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 440px) { .opts { grid-template-columns: 1fr; } }
+
+  .opt {
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px; font-weight: 700;
+    color: var(--text); cursor: pointer;
+    text-align: left;
+    display: flex; align-items: flex-start; gap: 10px;
+    transition: border-color .15s, background .15s, transform .1s;
+    line-height: 1.45;
+  }
+  .opt:hover {
+    border-color: var(--green-mid);
+    background: var(--green-light);
+    transform: translateY(-1px);
+  }
+  .opt.sel {
+    border-color: var(--green);
+    background: var(--green-light);
+    color: var(--green-dark);
+  }
+  .opt-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+  /* Nav */
+  .nav { display: flex; gap: 10px; }
+  .btn-back {
+    background: transparent;
+    border: 1.5px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 11px 20px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px; font-weight: 800;
+    color: var(--text-muted); cursor: pointer;
+    transition: background .15s, color .15s;
+  }
+  .btn-back:hover { background: var(--border); color: var(--text); }
+  .btn-next {
+    flex: 1;
+    background: var(--green-light);
+    border: 1.5px solid var(--green-mid);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px; font-weight: 800;
+    color: var(--green-dark); cursor: pointer;
+    transition: all .15s;
+    opacity: .4; pointer-events: none;
+  }
+  .btn-next.on { opacity: 1; pointer-events: all; }
+  .btn-next.on:hover {
+    background: var(--green); color: #fff;
+    border-color: var(--green);
+    transform: translateY(-1px);
+  }
+
+  /* Result */
+  .rcard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 12px 32px rgba(0,0,0,.06);
+    animation: fadeUp .4s ease both;
+  }
+  .r-top {
+    background: linear-gradient(135deg, #f0fdf4 0%, #fefce8 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 2rem 1.75rem 1.75rem;
+    text-align: center;
+  }
+  .r-score-ring {
+    width: 88px; height: 88px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 3px solid var(--green);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; margin: 0 auto 14px;
+    box-shadow: 0 0 0 6px var(--green-light);
+  }
+  .r-score-num { font-size: 26px; font-weight: 900; color: var(--green); line-height: 1; }
+  .r-score-max { font-size: 11px; color: var(--green); font-weight: 800; }
+  .r-title {
+    font-family: 'Fraunces', serif;
+    font-size: 22px; font-weight: 700;
+    color: var(--text); margin-bottom: 8px;
+  }
+  .r-desc { font-size: 14px; color: var(--text-muted); line-height: 1.65; max-width: 440px; margin: 0 auto; }
+
+  .r-body { padding: 1.5rem 1.75rem; }
+  .r-sec { margin-bottom: 1.25rem; }
+  .r-sec-title {
+    font-size: 11px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: .07em;
+    color: var(--text-soft); margin-bottom: 12px;
+  }
+
+  /* Score bars */
+  .score-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+  .score-label { font-size: 13px; font-weight: 700; color: var(--text); width: 115px; flex-shrink: 0; }
+  .score-track { flex: 1; background: var(--border); border-radius: 99px; height: 8px; overflow: hidden; }
+  .score-bar { height: 100%; border-radius: 99px; transition: width .8s cubic-bezier(.4,0,.2,1); }
+  .score-chip { font-size: 11px; font-weight: 800; width: 38px; text-align: right; flex-shrink: 0; }
+
+  /* Gap cards */
+  .gap-card {
+    background: #fafafa;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px; margin-bottom: 8px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .gap-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+  .gap-label { font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+  .gap-text { font-size: 12px; color: var(--text-muted); line-height: 1.55; }
+
+  /* Food grid */
+  .food-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  @media (max-width: 440px) { .food-grid { grid-template-columns: repeat(2, 1fr); } }
+  .food-chip {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 8px; font-size: 13px;
+    font-weight: 800; color: var(--text); text-align: center;
+  }
+  .food-chip span { display: block; font-size: 10px; font-weight: 700; color: var(--text-soft); margin-top: 3px; }
+
+  /* CTA */
+  .btn-cta {
+    display: block; width: 100%;
+    background: var(--green); color: #fff;
+    border: none; border-radius: var(--radius-sm);
+    padding: 15px; font-family: 'Nunito', sans-serif;
+    font-size: 15px; font-weight: 800;
+    cursor: pointer; transition: all .2s;
+    margin-bottom: 10px; text-decoration: none;
+    text-align: center;
+  }
+  .btn-cta:hover { background: #15803d; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(22,163,74,.3); }
+
+  .btn-retake {
+    display: block; width: 100%; background: transparent;
+    border: 1.5px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 12px; font-family: 'Nunito', sans-serif;
+    font-size: 14px; font-weight: 800;
+    color: var(--text-muted); cursor: pointer; transition: all .15s;
+  }
+  .btn-retake:hover { background: var(--bg); color: var(--text); }
+
+  /* Share strip */
+  .share-strip {
+    text-align: center; padding: 1rem 1.75rem 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .share-strip p { font-size: 12px; color: var(--text-soft); margin-bottom: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+  .share-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .share-btn {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 99px; padding: 7px 16px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 12px; font-weight: 800;
+    color: var(--text-muted); cursor: pointer;
+    transition: all .15s; display: flex; align-items: center; gap: 6px;
+  }
+  .share-btn:hover { background: var(--green-light); border-color: var(--green-mid); color: var(--green-dark); }
+
+  /* Branding */
+  .branding {
+    text-align: center; margin-top: 1.5rem;
+    font-size: 12px; color: var(--text-soft); font-weight: 700;
+  }
+  .branding a { color: var(--green); text-decoration: none; }
+  .branding a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div id="qw">
+  <div class="hdr">
+    <div class="badge">Free nutrition quiz</div>
+    <h1>How balanced is your diet, really?</h1>
+    <p>8 quick questions — get a personalised nutrition score and discover your gaps.</p>
+  </div>
+  <div class="pb-wrap"><div class="pb-fill" id="pb" style="width:0%"></div></div>
+  <div class="slbl" id="slbl">Question 1 of 8</div>
+  <div id="qbody"></div>
+  <div class="branding">A free tool from <a href="#">Your Brand</a> &nbsp;·&nbsp; Replace with your website link</div>
+</div>
+
+<script>
+const Qs=[
+  {tag:"Fruits & vegetables",text:"How many servings of fruits or vegetables do you eat daily?",
+   opts:[
+    {icon:"🥬",label:"4–5 servings (fist-sized portions)",scores:{produce:4}},
+    {icon:"🍎",label:"2–3 servings most days",scores:{produce:2}},
+    {icon:"🍟",label:"1 or fewer — mainly as sides",scores:{produce:1}},
+    {icon:"🤔",label:"I rarely eat them",scores:{produce:0}}
+   ]},
+  {tag:"Protein quality",text:"What are your main protein sources each day?",
+   opts:[
+    {icon:"🥚",label:"Eggs, fish, meat or legumes at every meal",scores:{protein:4}},
+    {icon:"🫘",label:"Legumes, tofu, dairy — mostly plant-based",scores:{protein:3}},
+    {icon:"🍗",label:"Some protein once or twice a day",scores:{protein:2}},
+    {icon:"🍞",label:"Mostly carbs — protein is hit or miss",scores:{protein:1}}
+   ]},
+  {tag:"Hydration",text:"How much plain water do you drink daily?",
+   opts:[
+    {icon:"💧",label:"2+ litres (about 8 cups)",scores:{hydration:4}},
+    {icon:"🥤",label:"1–2 litres",scores:{hydration:3}},
+    {icon:"☕",label:"Under 1 litre — mostly tea or coffee",scores:{hydration:2}},
+    {icon:"🧃",label:"Mainly juice, soda or flavoured drinks",scores:{hydration:1}}
+   ]},
+  {tag:"Whole grains & fibre",text:"What kind of carbohydrates do you mainly eat?",
+   opts:[
+    {icon:"🌾",label:"Oats, brown rice, quinoa, wholegrain bread",scores:{fibre:4}},
+    {icon:"🍚",label:"Mix of white and whole grain",scores:{fibre:3}},
+    {icon:"🍝",label:"Mostly white rice, pasta or white bread",scores:{fibre:2}},
+    {icon:"🍰",label:"Lots of refined carbs and pastries",scores:{fibre:1}}
+   ]},
+  {tag:"Healthy fats",text:"How often do you eat healthy fat sources?",
+   opts:[
+    {icon:"🥑",label:"Daily — avocado, nuts, oily fish, olive oil",scores:{fats:4}},
+    {icon:"🫒",label:"A few times a week",scores:{fats:3}},
+    {icon:"🧈",label:"Mostly butter or fried foods",scores:{fats:2}},
+    {icon:"🚫",label:"I try to avoid all fats",scores:{fats:1}}
+   ]},
+  {tag:"Added sugar",text:"How much added sugar do you consume daily?",
+   opts:[
+    {icon:"🌿",label:"Almost none — I read labels and skip sweets",scores:{sugar:4}},
+    {icon:"🍪",label:"A small treat a few times a week",scores:{sugar:3}},
+    {icon:"🥤",label:"A sugary drink or sweet most days",scores:{sugar:2}},
+    {icon:"🍰",label:"Several sweets, desserts or fizzy drinks daily",scores:{sugar:1}}
+   ]},
+  {tag:"Meal regularity",text:"How consistent are your meal times and portions?",
+   opts:[
+    {icon:"📅",label:"3 balanced meals at regular times daily",scores:{rhythm:4}},
+    {icon:"🕐",label:"Fairly regular, occasional skipped meal",scores:{rhythm:3}},
+    {icon:"🌪️",label:"Irregular — I skip meals often",scores:{rhythm:2}},
+    {icon:"😬",label:"Very chaotic — rarely planned",scores:{rhythm:1}}
+   ]},
+  {tag:"Processed foods",text:"How much of your food comes from packets or takeaways?",
+   opts:[
+    {icon:"✅",label:"Mainly home-cooked whole foods",scores:{wholefoods:4}},
+    {icon:"🥡",label:"Mix — home cooking + some packaged foods",scores:{wholefoods:3}},
+    {icon:"📦",label:"Mostly packaged, ready meals or takeaways",scores:{wholefoods:2}},
+    {icon:"🍔",label:"Almost all processed or fast food",scores:{wholefoods:1}}
+   ]}
+];
+
+const pillars=[
+  {key:"produce",    label:"Fruits & veg",    color:"#16a34a"},
+  {key:"protein",    label:"Protein",          color:"#d97706"},
+  {key:"hydration",  label:"Hydration",        color:"#2563eb"},
+  {key:"fibre",      label:"Fibre & grains",   color:"#7c3aed"},
+  {key:"fats",       label:"Healthy fats",     color:"#0891b2"},
+  {key:"sugar",      label:"Low sugar",        color:"#e11d48"},
+  {key:"rhythm",     label:"Meal rhythm",      color:"#059669"},
+  {key:"wholefoods", label:"Whole foods",      color:"#ca8a04"}
+];
+
+const advice={
+  produce:"Aim for 5 different coloured fruits or veg daily — each colour provides different vitamins and antioxidants.",
+  protein:"Include a quality protein source (eggs, fish, legumes, tofu) at every meal to support muscle and sustained energy.",
+  hydration:"Keep a 1-litre water bottle on your desk. Aim to finish it twice before dinner.",
+  fibre:"Swap white grains for whole grain versions — brown rice, oats, or wholemeal bread — to feed your gut bacteria.",
+  fats:"Add a small handful of nuts or half an avocado daily. Healthy fats support hormones and brain health.",
+  sugar:"Check ingredient labels for hidden sugars (syrup, dextrose, maltose). Cutting sugary drinks first has the biggest impact.",
+  rhythm:"Set a gentle alarm for breakfast and lunch. Consistent meal timing helps regulate hunger hormones all day.",
+  wholefoods:"Cook one extra meal at home per week. Batch-prep a grain and a protein on Sundays for easy weekday meals."
+};
+
+const foods=[
+  {food:"Spinach / kale",     why:"Iron + folate"},
+  {food:"Salmon or sardines", why:"Omega-3 + D3"},
+  {food:"Lentils / chickpeas",why:"Protein + fibre"},
+  {food:"Berries",            why:"Antioxidants"},
+  {food:"Oats",               why:"Fibre + beta-glucan"},
+  {food:"Greek yoghurt",      why:"Probiotics + protein"}
+];
+
+let cur=0,answers=[],sel=null;
+
+function upProg(){
+  document.getElementById('pb').style.width=(cur/Qs.length*100)+'%';
+  document.getElementById('slbl').textContent=cur<Qs.length?'Question '+(cur+1)+' of '+Qs.length:'Your results';
+}
+
+function render(){
+  sel=null; upProg();
+  const q=Qs[cur];
+  document.getElementById('qbody').innerHTML=`
+    <div class="qcard">
+      <span class="qtag">${q.tag}</span>
+      <div class="qtext">${q.text}</div>
+      <div class="opts">${q.opts.map((o,i)=>`
+        <button class="opt" onclick="pick(this,${i})">
+          <span class="opt-icon">${o.icon}</span>
+          <span>${o.label}</span>
+        </button>`).join('')}
+      </div>
+    </div>
+    <div class="nav">
+      ${cur>0?`<button class="btn-back" onclick="back()">← Back</button>`:''}
+      <button class="btn-next" id="bn" onclick="next()">${cur<Qs.length-1?'Next question →':'See my results →'}</button>
+    </div>`;
+}
+
+function pick(el,i){
+  document.querySelectorAll('.opt').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel'); sel=i;
+  const bn=document.getElementById('bn'); if(bn) bn.classList.add('on');
+}
+
+function next(){if(sel===null)return;answers[cur]=sel;cur++;cur>=Qs.length?showResult():render();}
+function back(){if(cur>0){cur--;render();}}
+
+function calcScores(){
+  const s={produce:0,protein:0,hydration:0,fibre:0,fats:0,sugar:0,rhythm:0,wholefoods:0};
+  answers.forEach((ai,qi)=>{Object.entries(Qs[qi].opts[ai].scores).forEach(([k,v])=>{if(s[k]!==undefined)s[k]+=v;});});
+  return s;
+}
+
+function chipColor(pct){return pct>=75?'#16a34a':pct>=50?'#d97706':'#e11d48';}
+
+function showResult(){
+  document.getElementById('pb').style.width='100%';
+  document.getElementById('slbl').textContent='Your results';
+  const s=calcScores();
+  const total=Object.values(s).reduce((a,b)=>a+b,0);
+  const maxScore=Qs.length*4;
+  const pct=Math.round((total/maxScore)*100);
+
+  const label=pct>=80?'Nutrition Star ⭐':pct>=60?'Pretty Balanced 💚':pct>=40?'Getting There 🌱':'Nutrition Newbie 🌿';
+  const desc=pct>=80?'Your eating habits are genuinely excellent. Focus on fine-tuning micronutrients and nutrient timing for peak performance.'
+    :pct>=60?'You have a solid nutritional base with a few clear gaps to close. Small targeted changes will make a big difference.'
+    :pct>=40?'You have some good habits but several key nutrition pillars need attention. Start with your lowest scoring areas below.'
+    :'Your diet has significant gaps across several areas. The good news: fixing just 2–3 pillars will transform your energy and wellbeing.';
+
+  const sorted=pillars.slice().sort((a,b)=>s[a.key]-s[b.key]);
+  const gaps=sorted.slice(0,3);
+
+  const barRows=pillars.map(p=>{
+    const pp=Math.round((s[p.key]/4)*100);
+    return `<div class="score-row">
+      <span class="score-label">${p.label}</span>
+      <div class="score-track"><div class="score-bar" style="width:${pp}%;background:${chipColor(pp)}"></div></div>
+      <span class="score-chip" style="color:${chipColor(pp)}">${pp}%</span>
+    </div>`;
+  }).join('');
+
+  const gapCards=gaps.map(p=>{
+    const pp=Math.round((s[p.key]/4)*100);
+    return `<div class="gap-card">
+      <div class="gap-dot" style="background:${chipColor(pp)}"></div>
+      <div><div class="gap-label">${p.label} — ${pp}%</div>
+      <div class="gap-text">${advice[p.key]}</div></div>
+    </div>`;
+  }).join('');
+
+  const foodChips=foods.map(f=>`<div class="food-chip">${f.food}<span>${f.why}</span></div>`).join('');
+
+  const shareText=`I scored ${pct}% on the nutrition quiz — "${label.replace(/[⭐💚🌱🌿]/g,'').trim()}"! Take it here:`;
+
+  document.getElementById('qbody').innerHTML=`
+    <div class="rcard">
+      <div class="r-top">
+        <div class="r-score-ring">
+          <span class="r-score-num">${pct}%</span>
+          <span class="r-score-max">score</span>
+        </div>
+        <div class="r-title">${label}</div>
+        <p class="r-desc">${desc}</p>
+      </div>
+
+      <div class="r-body">
+        <div class="r-sec">
+          <div class="r-sec-title">Your nutrition pillars</div>
+          ${barRows}
+        </div>
+
+        <div class="r-sec">
+          <div class="r-sec-title">Your 3 priority areas</div>
+          ${gapCards}
+        </div>
+
+        <div class="r-sec">
+          <div class="r-sec-title">Nutrient-dense foods to add this week</div>
+          <div class="food-grid">${foodChips}</div>
+        </div>
+
+        <!-- Replace href with your coaching/newsletter link -->
+        <a class="btn-cta" href="#" target="_blank">
+          Get my personalised meal plan →
+        </a>
+        <button class="btn-retake" onclick="retake()">Retake the quiz</button>
+      </div>
+
+      <div class="share-strip">
+        <p>Share your result</p>
+        <div class="share-btns">
+          <button class="share-btn" onclick="shareWhatsApp('${shareText}')">💬 WhatsApp</button>
+          <button class="share-btn" onclick="shareTwitter('${shareText}')">🐦 Twitter/X</button>
+          <button class="share-btn" onclick="copyLink()">🔗 Copy link</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function retake(){cur=0;answers=[];sel=null;render();}
+
+function shareWhatsApp(text){
+  window.open('https://wa.me/?text='+encodeURIComponent(text+' '+window.location.href),'_blank');
+}
+function shareTwitter(text){
+  window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(window.location.href),'_blank');
+}
+function copyLink(){
+  navigator.clipboard.writeText(window.location.href).then(()=>alert('Link copied!')).catch(()=>alert('Copy: '+window.location.href));
+}
+
+render();
+</script>
+</body>
+</html>
